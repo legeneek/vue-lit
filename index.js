@@ -25,7 +25,7 @@ export function defineComponent(name, propDefs, factory) {
         const template = factory.call(this, props)
         currentInstance = null
         this._bm && this._bm.forEach((cb) => cb())
-        const root = this
+        const root = window._useShadow ? this.attachShadow({ mode: 'closed' }) : this
         let isMounted = false
         effect(() => {
           if (isMounted) {
