@@ -6,11 +6,12 @@ import {
 
 let currentInstance
 
-export function defineComponent(name, propDefs, factory) {
+export function defineComponent(name, propDefs, factory, options) {
   if (typeof propDefs === 'function') {
     factory = propDefs
     propDefs = []
   }
+  options = Object.assign({ useShadow: true, shadowMode: 'closed'}, options || {})
 
   customElements.define(
     name,
@@ -25,7 +26,7 @@ export function defineComponent(name, propDefs, factory) {
         const template = factory.call(this, props)
         currentInstance = null
         this._bm && this._bm.forEach((cb) => cb())
-        const root = window._useShadow ? this.attachShadow({ mode: 'closed' }) : this
+        const root = options.useShadow ? this.attachShadow({ mode: options.shadowMode }) : this
         let isMounted = false
         effect(() => {
           if (isMounted) {
